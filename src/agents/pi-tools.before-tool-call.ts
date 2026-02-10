@@ -126,8 +126,6 @@ export function wrapToolWithBeforeToolCallHook(
   return {
     ...tool,
     execute: async (toolCallId, params, signal, onUpdate) => {
-      const startTime = Date.now();
-
       // Before hook - can modify params or block the call
       const beforeOutcome = await runBeforeToolCallHook({
         toolName,
@@ -140,6 +138,7 @@ export function wrapToolWithBeforeToolCallHook(
       }
 
       // Execute the tool
+      const startTime = Date.now();
       const result = await execute(toolCallId, beforeOutcome.params, signal, onUpdate);
       // Pure tool execution time (excludes hook overhead)
       const durationMs = Date.now() - startTime;
